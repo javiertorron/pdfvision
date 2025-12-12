@@ -1,87 +1,98 @@
-# 📊 PDF Vision - Actualización v1.0.0
+# Changelog - PDF Vision
 
-## ✨ Cambios Principales
+All notable changes to this project will be documented in this file.
 
-### 🔄 Progreso Dinámico
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-La barra de progreso ahora **avanza en tiempo real** mientras se convierten las páginas:
+---
 
-- **Detección automática**: Utiliza `pdfinfo` para contar el número de páginas del PDF
-- **Monitoreo en vivo**: Cuenta los archivos PNG generados mientras se convierte
-- **Progreso proporcional**: Si el PDF tiene 100 páginas, cada página = 1% de progreso
-- **Actualización continua**: Verificación cada 500ms para fluidez visual
+## [1.0.1] - 2025-12-12
 
-### 📈 Ejemplo de comportamiento
+### Fixed
+- **Critical**: Progress bar now updates in real-time during PDF conversion
+  - Root cause: Synchronous monitoring function was blocking the conversion process
+  - Solution: Implemented parallel threading worker for non-blocking progress tracking
+  - Progress advances 1% per page as PNG files are generated
+  - Monitor checks destination folder every 500ms
 
-Para un PDF de 10 páginas:
-```
-0% - Analizando PDF...
-10% - Convirtiendo... (1 página)
-20% - Convirtiendo... (2 páginas)
-30% - Convirtiendo... (3 páginas)
-...
-90% - Convirtiendo... (9 páginas)
-100% - Conversión completada!
-```
+### Changed
+- Switched from `QProcess` to `subprocess.Popen` for better process control
+- Replaced `QThread`-based monitoring with `threading.Thread` for parallel execution
+- Improved thread synchronization and cleanup on completion
 
-## 🛠️ Cambios Técnicos
+### Technical Details
+- **Architecture**: Dual-thread design
+  - Main QThread: Handles PDF conversion with pdftoppm
+  - Worker Thread: Monitors PNG file generation in parallel
+- **Progress Calculation**: `(PNG_files_count / total_pages) × 100`
+- **File Monitoring**: Real-time scanning of destination directory every 500ms
 
-### Nuevos métodos en `ConvertThread`
+---
 
-1. **`get_pdf_pages()`**
-   - Usa `pdfinfo` para obtener el número total de páginas
-   - Manejo de errores si `pdfinfo` no está disponible
-   - Retorna 0 si hay problemas
+## [1.0.0] - 2025-12-12
 
-2. **`monitor_progress(pdf_name, total_pages)`**
-   - Ejecuta en paralelo al proceso de conversión
-   - Monitorea archivos PNG generados
-   - Calcula progreso proporcional
-   - Se ejecuta cada 500ms para no consumir muchos recursos
+### Added
+- **GUI Application**: Full desktop interface with PyQt5
+  - File selection dialog for PDF input
+  - Directory selection dialog for output path
+  - Real-time progress bar (0-100%)
+  - Status indicator showing conversion progress
+  - Professional styling with color-coded buttons
 
-### Mejoras en la UI
+- **PDF Conversion**:
+  - High-quality PNG output at 300 DPI
+  - Automatic page detection using pdfinfo
+  - Batch processing for all PDF pages
+  - Error handling and user feedback
 
-- **Etiqueta de estado dinámica**: Muestra "Convirtiendo... X%" en tiempo real
-- **Color indicador**: Azul durante conversión, verde al completar
-- **Validación mejorada**: Verifica que `pdfinfo` esté instalado
+- **System Integration**:
+  - Ubuntu .deb package (12KB, installable)
+  - Desktop menu integration with custom icon
+  - Command-line launcher: `pdfvision`
+  - Proper dependency management
 
-## 🧪 Pruebas
+- **Documentation**:
+  - Comprehensive README.md
+  - Contributing guidelines
+  - MIT License
+  - Setup instructions
 
-Se incluye un **script de demostración** (`demo.sh`) que:
+- **Build System**:
+  - Automated .deb package builder
+  - Post-install scripts for system integration
+  - Version management
 
-- Crea un PDF de prueba con 10 páginas
-- Realiza la conversión
-- Muestra el progreso en tiempo real en terminal
-- Verifica que todo funciona correctamente
+### Requirements
+- Python 3.6+
+- PyQt5 5.12+
+- poppler-utils (pdftoppm, pdfinfo)
+- Ubuntu 18.04 LTS or later
 
-**Ejecutar demostración:**
-```bash
-./demo.sh
-```
+---
 
-**Resultado esperado:**
-```
-Progreso: [##                  ]  20% (2/10 páginas)
-Progreso: [#####               ]  50% (5/10 páginas)
-Progreso: [####################] 100% (10/10 páginas)
-```
+## Planned Features
 
-## 📦 Paquete actualizado
+### v1.1.0 (Upcoming)
+- [ ] Batch conversion (multiple PDFs)
+- [ ] Format options (JPEG, TIFF)
+- [ ] Quality/resolution settings
+- [ ] Recent files history
+- [ ] Drag & drop support
 
-El paquete `.deb` ha sido reconstruido con las mejoras:
+### v1.2.0 (Future)
+- [ ] Advanced image processing
+- [ ] Watermark support
+- [ ] Page range selection
+- [ ] Output filename customization
 
-- **Versión**: 1.0.0
-- **Tamaño**: ~8.5 KB
-- **Dependencias**: python3, python3-pyqt5, poppler-utils
+---
 
-**Para instalar la versión actualizada:**
-```bash
-sudo dpkg -i build/pdfvision_1.0.0.deb
-```
+## Support
 
-## 🔍 Verificación
-
-Para verificar que todo está instalado correctamente:
+- **Issues**: https://github.com/javiertorron/pdfvision/issues
+- **Contributing**: See CONTRIBUTING.md
+- **License**: MIT - See LICENSE file
 
 ```bash
 ./CHECK_DEB.sh
