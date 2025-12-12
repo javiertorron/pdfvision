@@ -1,212 +1,379 @@
-# Convertidor de PDF a PNG
+# PDF Vision
 
-Aplicación de escritorio GUI para Ubuntu que convierte archivos PDF a imágenes PNG con alta resolución (300 DPI).
+> A professional desktop application for converting PDF documents to high-quality PNG images on Ubuntu/Linux.
 
-## Características
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/)
+[![Ubuntu 18.04+](https://img.shields.io/badge/ubuntu-18.04+-orange.svg)](https://ubuntu.com/)
 
-- ✨ Interfaz gráfica intuitiva con PyQt5
-- 📁 Selector de archivo PDF con diálogo de archivo
-- 📂 Selector de directorio destino
-- ⏱️ Barra de progreso visual durante la conversión
-- 🎯 Conversión de alta resolución (300 DPI)
-- 🛑 Botón para cancelar conversión
-- 📊 Indicadores de estado en tiempo real
+## 🌟 Features
 
-## Requisitos
+- **Intuitive GUI** - User-friendly interface built with PyQt5
+- **Visual File Selection** - Dialog-based PDF file picker
+- **Directory Selection** - Choose custom output location for PNG files
+- **Real-time Progress Bar** - Dynamic progress tracking (1% per page)
+- **High-Quality Output** - Converts to PNG at 300 DPI resolution
+- **Batch Processing** - Converts all PDF pages to individual PNG images
+- **Cancellation Support** - Stop conversion at any time
+- **Live Status Indicators** - Color-coded status updates (green/red/blue)
+- **Professional Icon** - Custom SVG icon for desktop integration
+- **Installable Package** - Ubuntu-ready .deb package
 
-- Ubuntu 18.04 o superior
-- Python 3.6 o superior
-- `pdftoppm` (incluido en el paquete `poppler-utils`)
+## 📋 Requirements
 
-## Instalación
+- **OS**: Ubuntu 18.04 LTS or later (or any Debian-based distribution)
+- **Python**: 3.6 or higher
+- **Dependencies**:
+  - `python3-pyqt5` - GUI framework
+  - `poppler-utils` - PDF processing tools (pdftoppm, pdfinfo)
 
-### ⭐ Opción 1: Paquete .deb (Recomendado para usuarios)
+## 🚀 Installation
+
+### Option 1: DEB Package (Recommended for Users)
 
 ```bash
-# Construir el paquete
+# Download the latest release
+wget https://github.com/javiertorron/pdf-vision/releases/download/v1.0.0/pdfvision_1.0.0.deb
+
+# Install the package
+sudo dpkg -i pdfvision_1.0.0.deb
+
+# Install dependencies if needed
+sudo apt-get install python3-pyqt5 poppler-utils
+```
+
+### Option 2: Build from Source
+
+```bash
+# Clone the repository
+git clone https://github.com/javiertorron/pdf-vision.git
+cd pdf-vision
+
+# Make scripts executable
+chmod +x build_deb.sh manage.sh
+
+# Build the package
 ./build_deb.sh
 
-# Instalar
+# Install
 sudo dpkg -i build/pdfvision_1.0.0.deb
 ```
 
-O usar el gestor:
-```bash
-./manage.sh
-# Selecciona opción 1 (Construir) y luego opción 2 (Instalar)
-```
-
-### Opción 2: Script de instalación
+### Option 3: Manual Installation
 
 ```bash
-chmod +x install.sh
-./install.sh
-```
-
-### Opción 3: Instalación manual
-
-```bash
-# Instalar dependencias del sistema
+# Install system dependencies
 sudo apt-get update
 sudo apt-get install -y python3 python3-pip python3-pyqt5 poppler-utils
 
-# Instalar dependencias de Python
+# Install Python dependencies
 pip3 install -r requirements.txt
 
-# Hacer el script ejecutable
+# Make the application executable
 chmod +x pdf_converter.py
+
+# Run the application
+python3 pdf_converter.py
 ```
 
-## Uso
+## 💻 Usage
 
-### Desde el menú de aplicaciones (si está instalado como .deb)
+### Launch the Application
 
-Busca "PDF Vision" en tu menú de aplicaciones y haz clic para ejecutar.
+**From Applications Menu:**
+- Search for "PDF Vision" in your application launcher
+- Click to run
 
-### Desde terminal
-
+**From Terminal:**
 ```bash
-# Si está instalado como paquete .deb:
+# If installed as .deb package
 pdfvision
 
-# Si está en desarrollo:
+# If running from source
 python3 pdf_converter.py
-
-# O directamente:
-./pdf_converter.py
 ```
 
-### Uso de la aplicación
+### Converting PDFs
 
-1. **Seleccionar PDF**: Haz clic en "Examinar" para seleccionar el archivo PDF que deseas convertir
-2. **Seleccionar destino**: Haz clic en "Examinar" para elegir dónde guardar las imágenes PNG
-3. **Iniciar conversión**: Haz clic en "Iniciar Conversión"
-4. **Monitorear progreso**: Observa la barra de progreso y el estado
-5. **Resultado**: Se mostrarán los archivos PNG convertidos en el directorio seleccionado
+1. **Select PDF File**
+   - Click "Browse" next to "Select PDF File"
+   - Choose your PDF document
+   - The file path will appear in the input field
 
-## Cómo funciona
+2. **Choose Output Directory**
+   - Click "Browse" next to "Select Output Directory"
+   - Select where to save the PNG images
+   - The path will appear in the input field
 
-La aplicación utiliza `pdftoppm` con los siguientes parámetros:
+3. **Start Conversion**
+   - Click "Start Conversion" button
+   - The progress bar will update as pages are processed
+   - Each page = 1% progress for accurate tracking
+
+4. **Monitor Progress**
+   - Watch the progress bar advance in real-time
+   - Status shows current percentage and page count
+   - Conversion details appear when complete
+
+5. **View Results**
+   - PNG files are saved with names: `filename-001.png`, `filename-002.png`, etc.
+   - Each PDF page becomes a separate PNG image
+   - All files are stored in your chosen output directory
+
+## 🔧 Technical Details
+
+### How It Works
+
+PDF Vision uses `pdftoppm` from the Poppler utilities with these parameters:
 
 ```bash
-pdftoppm -png -r 300 archivo.pdf directorio_salida/
+pdftoppm -png -r 300 input.pdf output_directory/
 ```
 
-- `-png`: Especifica que el formato de salida es PNG
-- `-r 300`: Establece la resolución a 300 DPI (alta calidad)
-- Genera un archivo PNG por cada página del PDF
+- **-png** - Output format is PNG
+- **-r 300** - Resolution of 300 DPI (professional print quality)
+- Creates one PNG file per PDF page
 
-## Instalación de dependencias en caso de error
+### Architecture
 
-Si la aplicación no funciona, intenta instalar manualmente las dependencias:
+- **Multi-threading** - Conversion runs in separate thread (no GUI freezing)
+- **Real-time Monitoring** - Progress tracking every 500ms
+- **Dynamic Calculation** - Progress = (pages_converted / total_pages) × 100
+- **Error Handling** - Comprehensive validation and user feedback
+- **Resource Efficient** - Minimal memory footprint
+
+### Key Components
+
+1. **ConvertThread** - Handles PDF to PNG conversion
+2. **PDFConverterApp** - Main GUI application window
+3. **Progress Monitor** - Tracks file generation in real-time
+4. **Dependency Checker** - Validates system requirements
+
+## 📦 Package Details
+
+| Property | Value |
+|----------|-------|
+| **Package Name** | pdfvision |
+| **Version** | 1.0.0 |
+| **Architecture** | all (universal) |
+| **Size** | ~8.5 KB |
+| **Maintainer** | PDF Vision Development |
+| **License** | MIT |
+
+### Installed Files
+
+```
+/usr/bin/pdfvision                           # Main executable
+/usr/share/applications/pdfvision.desktop    # Application menu entry
+/usr/share/pixmaps/pdfvision.svg            # Desktop icon
+/usr/share/doc/pdfvision/README.md          # Documentation
+/usr/share/doc/pdfvision/LICENSE            # License
+```
+
+## 🛠️ Project Structure
+
+```
+pdf-vision/
+├── pdf_converter.py          # Main application (PyQt5)
+├── pdfvision.py             # Application launcher
+├── icon.svg                 # Professional SVG icon
+├── build_deb.sh             # DEB package builder
+├── manage.sh                # Interactive manager
+├── demo.sh                  # Demo script with sample PDF
+├── CHECK_DEB.sh             # Installation verifier
+├── requirements.txt         # Python dependencies
+├── install.sh               # Quick install script
+├── LICENSE                  # MIT License
+├── README.md                # This file
+├── CHANGELOG.md             # Version history
+├── DISTRIBUTION.md          # Distribution guide
+└── build/                   # Build output directory
+    └── pdfvision_1.0.0.deb  # Installable package
+```
+
+## ⚙️ Configuration & Customization
+
+### Change Output Resolution
+
+Edit `pdf_converter.py` and modify this line:
+
+```python
+'-r', '300',  # Change 300 to your desired DPI (e.g., 150, 200, 400)
+```
+
+### Modify Application Name
+
+Edit `build_deb.sh` and change:
 
 ```bash
-# Para Debian/Ubuntu
+APP_NAME="pdfvision"
+APP_DISPLAY_NAME="PDF Vision"
+```
+
+## 🧪 Testing
+
+### Demo Script
+
+Test the application with a sample PDF:
+
+```bash
+./demo.sh
+```
+
+This creates a 10-page test PDF and demonstrates real-time progress tracking.
+
+### Installation Verification
+
+```bash
+./CHECK_DEB.sh
+```
+
+Verifies all components are correctly installed.
+
+## 🐛 Troubleshooting
+
+### Error: "pdftoppm: command not found"
+
+```bash
 sudo apt-get install poppler-utils
-sudo apt-get install python3-pyqt5
+```
 
-# Alternativa con pip
+### Error: "No module named PyQt5"
+
+```bash
+sudo apt-get install python3-pyqt5
+```
+
+Or install via pip:
+```bash
 pip3 install PyQt5
 ```
 
-## Estructura del proyecto
-
-```
-pdf_converter/
-├── pdf_converter.py       # Aplicación principal
-├── pdfvision.py          # Wrapper para menú de aplicaciones
-├── icon.svg              # Icono de la aplicación
-├── requirements.txt      # Dependencias de Python
-├── install.sh            # Script de instalación simple
-├── build_deb.sh          # Script para construir .deb
-├── manage.sh             # Gestor interactivo
-├── LICENSE               # Licencia MIT
-├── README.md             # Este archivo
-└── build/                # Directorio de compilación
-    └── pdfvision_1.0.0.deb
-```
-
-## Solución de problemas
-
-### "pdftoppm: command not found"
-
-Instala poppler-utils:
-```bash
-sudo apt-get install poppler-utils
-```
-
-### Error de permisos al ejecutar
-
-Dale permisos de ejecución:
-```bash
-chmod +x pdf_converter.py
-```
-
-### PyQt5 no encontrado
-
-Instala PyQt5:
-```bash
-pip3 install PyQt5
-```
-
-O a través del repositorio del sistema:
-```bash
-sudo apt-get install python3-pyqt5
-```
-
-## Características técnicas
-
-- **Threading**: La conversión se ejecuta en un thread separado para no congelar la GUI
-- **Validación**: Verifica la existencia de archivos y dependencias antes de convertir
-- **Manejo de errores**: Muestra mensajes de error detallados al usuario
-- **Indicadores visuales**: Estados de color para mejor UX (verde=éxito, rojo=error, azul=procesando)
-
-## Información del paquete .deb
-
-**Nombre**: `pdfvision`
-**Versión**: 1.0.0
-**Dependencias**: python3, python3-pyqt5, poppler-utils
-**Licencia**: MIT
-
-### Localización de archivos instalados:
-
-```
-/usr/bin/pdfvision              # Ejecutable principal
-/usr/share/applications/pdfvision.desktop  # Entrada del menú
-/usr/share/pixmaps/pdfvision.svg          # Icono
-/usr/share/doc/pdfvision/                 # Documentación
-```
-
-### Comandos útiles:
+### Application not appearing in menu
 
 ```bash
-# Ver información del paquete instalado
-dpkg -s pdfvision
+sudo update-desktop-database /usr/share/applications
+```
 
-# Ver archivos instalados
-dpkg -L pdfvision
+### Permission denied errors
 
-# Ver dependencias
-dpkg -I build/pdfvision_1.0.0.deb
+```bash
+# Make scripts executable
+chmod +x pdf_converter.py build_deb.sh manage.sh
 
-# Desinstalar
+# Or reinstall the package
+sudo dpkg -i --force-all build/pdfvision_1.0.0.deb
+```
+
+### Slow conversion on large PDFs
+
+- Close other applications to free up resources
+- PDFs with complex graphics may take longer to convert
+- 300 DPI resolution is intentionally high-quality
+
+## 🗑️ Uninstallation
+
+```bash
+# Remove the package
 sudo apt remove pdfvision
 
-# Limpiar el sistema después de desinstalar
+# Clean up system
 sudo apt autoremove
+
+# Remove build artifacts (if cloned from source)
+cd pdf-vision
+rm -rf build/
 ```
 
-## Licencia
+## 📊 Progress Tracking Example
 
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
+For a 100-page PDF:
 
-## Autor
+```
+Starting conversion...
+[0%] Analyzing PDF...
+[10%] Converting... 10/100 pages
+[20%] Converting... 20/100 pages
+[50%] Converting... 50/100 pages
+[100%] Conversion complete! ✓
+```
 
-Convertidor PDF a PNG - 2025
+Each page advances the progress bar by exactly 1%.
 
-## Notas
+## 🤝 Contributing
 
-- Cada página del PDF genera un archivo PNG separado
-- Los archivos PNG se nombran como: `nombre_pdf-001.png`, `nombre_pdf-002.png`, etc.
-- La resolución de 300 DPI es ideal para impresión y buena legibilidad
-- Puedes cambiar la resolución editando el valor en `pdf_converter.py` (línea ~95)
+Contributions are welcome! Please feel free to submit a Pull Request with:
+
+- Bug fixes
+- Feature enhancements
+- Documentation improvements
+- Translation support
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2025 PDF Vision
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+```
+
+## 🔗 Links
+
+- **Repository**: https://github.com/javiertorron/pdf-vision
+- **Issues**: https://github.com/javiertorron/pdf-vision/issues
+- **Releases**: https://github.com/javiertorron/pdf-vision/releases
+- **PyQt5**: https://www.riverbankcomputing.com/software/pyqt/
+- **Poppler**: https://poppler.freedesktop.org/
+
+## ⭐ Show Your Support
+
+If you find this project useful, please consider:
+
+- ⭐ Starring the repository
+- 🐛 Reporting bugs and suggesting features
+- 📢 Sharing with others
+- 🤝 Contributing to the project
+
+## 📧 Support
+
+For issues, questions, or suggestions:
+
+1. **Check existing issues** - Your question may already be answered
+2. **Create an issue** - Describe your problem in detail
+3. **Use discussions** - Ask questions and share ideas
+
+## 🎯 Roadmap
+
+Future enhancements planned:
+
+- [ ] Support for additional output formats (JPEG, TIFF, WebP)
+- [ ] Configurable resolution and quality settings
+- [ ] Batch processing with drag-and-drop
+- [ ] Conversion history and recent files
+- [ ] Theme customization (dark/light mode)
+- [ ] Multi-language support
+- [ ] Advanced image processing (crop, rotate, enhance)
+
+## 🙏 Acknowledgments
+
+- Built with [PyQt5](https://www.riverbankcomputing.com/software/pyqt/)
+- Uses [Poppler](https://poppler.freedesktop.org/) for PDF processing
+- Icon inspired by modern design principles
+
+---
+
+**Made with ❤️ for the Linux community**
+
+Last Updated: December 2025 | Version: 1.0.0

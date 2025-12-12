@@ -74,7 +74,7 @@ Description: Convertidor de PDF a PNG
   - Barra de progreso en tiempo real
   - Conversión de alta calidad
   - Soporte para múltiples páginas
-Homepage: https://github.com/yourusername/pdfvision
+Homepage: https://github.com/javiertorron/pdfvision
 EOF
 
 # Crear script postinst
@@ -128,7 +128,7 @@ cat > "$DEBIAN_DIR/DEBIAN/copyright" << EOF
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: pdfvision
 Upstream-Contact: PDF Vision <dev@pdfvision.local>
-Source: https://github.com/yourusername/pdfvision
+Source: https://github.com/javiertorron/pdfvision
 
 Files: *
 Copyright: 2025 PDF Vision
