@@ -2,7 +2,7 @@
 
 **Release Date:** December 12, 2025  
 **Status:** ✅ Stable Release  
-**Download:** [pdfvision_1.0.0.deb](https://github.com/yourusername/pdf-vision/releases/download/v1.0.0/pdfvision_1.0.0.deb)
+**Download:** [pdfvision_1.0.0.deb](https://github.com/javiertorron/pdf-vision/releases/download/v1.0.0/pdfvision_1.0.0.deb)
 
 ---
 
@@ -96,7 +96,7 @@ sudo apt-get install -f  # Install dependencies if needed
 ### From Source
 
 ```bash
-git clone https://github.com/yourusername/pdf-vision.git
+git clone https://github.com/javiertorron/pdf-vision.git
 cd pdf-vision
 ./build_deb.sh
 sudo dpkg -i build/pdfvision_1.0.0.deb
@@ -154,10 +154,10 @@ Select PDF → Choose output → Click Start → Real-time progress (1% per page
 
 Complete documentation is available in the repository:
 
-- **[README.md](https://github.com/yourusername/pdf-vision/blob/main/README.md)** - Getting started guide
-- **[CONTRIBUTING.md](https://github.com/yourusername/pdf-vision/blob/main/CONTRIBUTING.md)** - How to contribute
-- **[CHANGELOG.md](https://github.com/yourusername/pdf-vision/blob/main/CHANGELOG.md)** - Detailed version history
-- **[LICENSE](https://github.com/yourusername/pdf-vision/blob/main/LICENSE)** - MIT License
+- **[README.md](https://github.com/javiertorron/pdf-vision/blob/main/README.md)** - Getting started guide
+- **[CONTRIBUTING.md](https://github.com/javiertorron/pdf-vision/blob/main/CONTRIBUTING.md)** - How to contribute
+- **[CHANGELOG.md](https://github.com/javiertorron/pdf-vision/blob/main/CHANGELOG.md)** - Detailed version history
+- **[LICENSE](https://github.com/javiertorron/pdf-vision/blob/main/LICENSE)** - MIT License
 
 ---
 
@@ -230,12 +230,12 @@ PDF Vision is released under the **MIT License**. See [LICENSE](LICENSE) for det
 
 ## 📞 Support
 
-- **Issues**: [GitHub Issues](https://github.com/yourusername/pdf-vision/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/yourusername/pdf-vision/discussions)
+- **Issues**: [GitHub Issues](https://github.com/javiertorron/pdf-vision/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/javiertorron/pdf-vision/discussions)
 - **Documentation**: See README.md and other docs
 
 ---
 
 **Thank you for using PDF Vision!** 🎉
 
-For more information, visit the [official repository](https://github.com/yourusername/pdf-vision).
+For more information, visit the [official repository](https://github.com/javiertorron/pdf-vision).
