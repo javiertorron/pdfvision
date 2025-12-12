@@ -8,6 +8,8 @@ import sys
 import subprocess
 import os
 import re
+import threading
+import time
 from pathlib import Path
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
@@ -28,6 +30,7 @@ class ConvertThread(QThread):
         self.output_dir = output_dir
         self.process = None
         self.should_stop = False
+        self.monitor_thread = None
         
     def get_pdf_pages(self):
         """Obtener el número de páginas del PDF"""
@@ -48,13 +51,11 @@ class ConvertThread(QThread):
         except (subprocess.CalledProcessError, FileNotFoundError, ValueError):
             return 0
     
-    def monitor_progress(self, pdf_name, total_pages):
-        """Monitorear el progreso de conversión contando archivos PNG generados"""
-        from time import sleep
-        
+    def monitor_progress_worker(self, pdf_name, total_pages):
+        """Worker que monitorea el progreso en un thread separado"""
         output_dir_path = Path(self.output_dir)
         
-        while not self.should_stop and self.process.state() == QProcess.Running:
+        while not self.should_stop:
             try:
                 # Contar archivos PNG generados
                 png_files = list(output_dir_path.glob(f"{pdf_name}-*.png"))
@@ -66,9 +67,9 @@ class ConvertThread(QThread):
                     progress = min(progress, 99)
                     self.progress_update.emit(progress)
                 
-                sleep(0.5)  # Verificar cada 500ms
+                time.sleep(0.5)  # Verificar cada 500ms
             except Exception:
-                sleep(0.5)
+                time.sleep(0.5)
         
     def run(self):
         try:
@@ -96,29 +97,32 @@ class ConvertThread(QThread):
             # Emitir progreso inicial
             self.progress_update.emit(0)
             
-            # Ejecutar el comando
-            self.process = QProcess()
-            self.process.start('pdftoppm', [
-                '-png',
-                '-r', '300',
-                self.pdf_path,
-                output_path
-            ])
-            
-            # Iniciar monitoreo de progreso en paralelo
+            # Iniciar thread de monitoreo ANTES de la conversión
             self.should_stop = False
-            self.monitor_progress(pdf_name, total_pages)
+            self.monitor_thread = threading.Thread(
+                target=self.monitor_progress_worker,
+                args=(pdf_name, total_pages),
+                daemon=True
+            )
+            self.monitor_thread.start()
             
-            # Esperar a que se complete
-            if not self.process.waitForFinished(-1):
-                self.conversion_finished.emit(False, "Error durante la conversión")
-                return
+            # Ejecutar el comando pdftoppm
+            self.process = subprocess.Popen(
+                ['pdftoppm', '-png', '-r', '300', self.pdf_path, output_path],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE
+            )
             
+            # Esperar a que se complete el proceso
+            stdout, stderr = self.process.communicate()
+            
+            # Detener el monitor
             self.should_stop = True
+            self.monitor_thread.join(timeout=2)
             
             # Verificar si la conversión fue exitosa
-            if self.process.exitCode() != 0:
-                error_msg = self.process.readAllStandardError().data().decode()
+            if self.process.returncode != 0:
+                error_msg = stderr.decode() if stderr else "Error desconocido"
                 self.conversion_finished.emit(False, f"Error: {error_msg}")
                 return
             
@@ -139,8 +143,10 @@ class ConvertThread(QThread):
     def stop(self):
         """Detener el proceso"""
         self.should_stop = True
-        if self.process and self.process.state() == QProcess.Running:
+        if self.process:
             self.process.kill()
+        if self.monitor_thread and self.monitor_thread.is_alive():
+            self.monitor_thread.join(timeout=2)
 
 
 class PDFConverterApp(QMainWindow):

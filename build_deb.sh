@@ -9,7 +9,7 @@ echo ""
 
 # Variables
 APP_NAME="pdfvision"
-APP_VERSION="1.0.0"
+APP_VERSION="1.0.1"
 APP_DISPLAY_NAME="PDF Vision"
 PACKAGE_NAME="pdfvision"
 BUILD_DIR="build"
