@@ -1,0 +1,9 @@
+pdfvision (1.0.0-1) focal; urgency=medium
+
+  * Versión inicial de PDF Vision
+  * Interfaz gráfica con PyQt5
+  * Conversión a 300 DPI
+  * Barra de progreso
+  * Cancelación de conversión
+
+ -- PDF Vision <dev@pdfvision.local>  Fri, 12 Dec 2025 18:53:20 +0100

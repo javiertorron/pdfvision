@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+# Limpieza antes de desinstalación
+exit 0
